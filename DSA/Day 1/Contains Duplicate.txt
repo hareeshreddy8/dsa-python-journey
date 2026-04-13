@@ -1,8 +1,0 @@
-class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        return len(nums) != len(set(nums))
-
-
-#Problem : Contains Duplicates
-#approach : Set usage
-#time complexity : O(n)
