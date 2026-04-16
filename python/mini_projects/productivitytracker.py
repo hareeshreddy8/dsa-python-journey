@@ -6,7 +6,8 @@
 #3.Marks tasks as completed 
 #4.File persistent(using JSON)
 #5.Delete task
-#Edit task
+#6.Edit task
+#Fault tolerance(JSONDecodeError)
 #--------------------------------------------------------
 
 import json
@@ -19,6 +20,11 @@ def load_tasks():
             return tasks
     except FileNotFoundError:
         return []
+    except json.JSONDecodeError:
+        print("File corrupted. Resetting... ")
+        tasks = []
+        save_tasks(tasks)
+        return tasks
     
 
 #to save the contents in memory to file to not lose them
