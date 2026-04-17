@@ -66,6 +66,13 @@ def edit_task(tasks,index : int,new_name:str):
         raise IndexError(f"Invalid index.Please enter between {0} and {len(tasks) - 1}")
     tasks[index]["name"] = new_name
 
+#Search tasks with task name 
+def search_task(tasks,name):
+    tasks_found = []
+    for task in tasks:
+        if name.lower() in task["name"].lower():
+            tasks_found.append(task)
+    return tasks_found
     
 
 #Display all tasks with their index and completion status
@@ -108,12 +115,13 @@ def main():
         print("3. Mark Task as Done")
         print("4. Delete Task")
         print("5. Edit Task Name")
-        print("6. Exit")
+        print("6. Search task by name")
+        print("7. Exit")
         print("================")
         try :
             choice = int(input("Enter your choice: "))
 
-        except:
+        except ValueError:
             print("Invalid input. Please enter a number.")
             continue
 
@@ -173,10 +181,22 @@ def main():
 
             except ValueError:
                 print("Please enter a valid name.")
-
         elif choice == 6:
-            break
+            
+            while True:
+                name = str(input("Enter task name to search: "))
+                if name.strip():
+                    break
+                else :
+                    print("Please enter a valid name. ")
+            tasks_found = search_task(tasks,name)
+            if len(tasks_found) != 0:
+                display_tasks(tasks_found)
 
+            else :
+                print("No matches found")
+        elif choice == 7:
+            break
         else :
             print("Invalid choice. Please try again.")
 
