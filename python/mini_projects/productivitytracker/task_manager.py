@@ -38,3 +38,23 @@ def search_task(tasks,name):
         if name.lower() in task["name"].lower():
             tasks_found.append(task)
     return tasks_found
+
+
+#filter task with priority 
+def filter_tasks_by_priority(tasks,priority):
+    filtered_tasks = []
+    priority = priority.lower()
+    for task in tasks:
+        if task.get("priority") == priority.lower():
+            filtered_tasks.append(task)
+
+    return filtered_tasks
+
+#sort tasks by duedate
+def sort_tasks_by_due_date(tasks):
+    return sorted(tasks,key = lambda x: x.get("due_date","9999-12-31"))
+
+#sorting by priority
+def sort_tasks_by_priority(tasks):
+    priority_order = {"high" : 1,"medium": 2,"low":3}
+    return sorted(tasks, key = lambda x : priority_order.get(x.get("priority").lower(),99))

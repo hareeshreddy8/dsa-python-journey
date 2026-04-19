@@ -1,3 +1,15 @@
+# CLI Productivity Tracker(phase 1 - In memory version)
+#--------------------------------------------------------
+#Features :
+#1.Add task
+#2.Display Task
+#3.Marks tasks as completed 
+#4.File persistent(using JSON)
+#5.Delete task
+#6.Edit task
+#7.Fault tolerance(JSONDecodeError)
+#--------------------------------------------------------
+
 from storage import FILE_NAME as FILE_NAME, json as json, load_tasks as load_tasks, save_tasks as save_tasks
 import task_manager
 
@@ -44,7 +56,8 @@ def main():
         print("4. Delete Task")
         print("5. Edit Task Name")
         print("6. Search task by name")
-        print("7. Exit")
+        print("7. Filter with priority")
+        print("8. Exit")
         print("================")
         try :
             choice = int(input("Enter your choice: "))
@@ -154,6 +167,20 @@ def main():
             else :
                 print("No matches found")
         elif choice == 7:
+            while True:
+                priority = input("Enter priority to filter tasks: ")
+                if priority.lower() in {"high","medium","low"}:
+                    break 
+                else :
+                    print("Invalid priority. Choose: high/medium/low")
+
+            filtered_tasks = task_manager.filter_tasks_by_priority(tasks,priority)
+            if filtered_tasks:
+                display_tasks(filtered_tasks)
+            else :
+                print("No tasks found with that priority")
+
+        elif choice == 8:
             break
         else :
             print("Invalid choice. Please try again.")
