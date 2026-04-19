@@ -58,3 +58,22 @@ def sort_tasks_by_due_date(tasks):
 def sort_tasks_by_priority(tasks):
     priority_order = {"high" : 1,"medium": 2,"low":3}
     return sorted(tasks, key = lambda x : priority_order.get(x.get("priority").lower(),99))
+
+
+#To get status of tasks
+def get_task_stats(tasks):
+    stats = {}
+    for task in tasks:
+        stats["total"] = stats.get("total",0) + 1
+        if task.get("status"):
+            stats["completed"] = stats.get("completed",0) + 1
+
+        else :
+            stats["pending"] = stats.get("pending",0) + 1
+
+        priority = task.get("priority")
+
+        stats[priority] = stats.get(priority,0) + 1
+
+    return stats
+

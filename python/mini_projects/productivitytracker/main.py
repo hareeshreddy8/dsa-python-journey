@@ -10,7 +10,7 @@
 #7.Fault tolerance(JSONDecodeError)
 #--------------------------------------------------------
 
-from storage import FILE_NAME as FILE_NAME, json as json, load_tasks as load_tasks, save_tasks as save_tasks
+from storage import load_tasks as load_tasks, save_tasks as save_tasks
 import task_manager
 
 #Display all tasks with their index and completion status
@@ -57,7 +57,8 @@ def main():
         print("5. Edit Task Name")
         print("6. Search task by name")
         print("7. Filter with priority")
-        print("8. Exit")
+        print("8. Status of tasks")
+        print("9. Exit")
         print("================")
         try :
             choice = int(input("Enter your choice: "))
@@ -181,6 +182,21 @@ def main():
                 print("No tasks found with that priority")
 
         elif choice == 8:
+            stats = task_manager.get_task_stats(tasks)
+            if stats:
+                print("===== DASHBOARD =====")
+                print(f"Total tasks   : {stats.get('total', 0)}")
+                print(f"Completed     : {stats.get('completed', 0)}")
+                print(f"Pending       : {stats.get('pending', 0)}")
+                print(f"High priority : {stats.get('high', 0)}")
+                print(f"Medium        : {stats.get('medium', 0)}")
+                print(f"Low           : {stats.get('low', 0)}")
+                print("=====================")
+
+            else :
+                print("No tasks to show status. ")
+
+        elif choice == 9:
             break
         else :
             print("Invalid choice. Please try again.")
