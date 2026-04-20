@@ -4,11 +4,18 @@ def load_tasks():
     try :
         with open(FILE_NAME,"r") as file :
             tasks = json.load(file)
+            for task in tasks :
+                if "status" not in task:
+                    task["status"] = False
+
+                if "name" not in task :
+                    task["name"] = "Untitiled Task"
+
             return tasks
     except FileNotFoundError:
         return []
     except json.JSONDecodeError:
-        print("File corrupted. Resetting... ")
+        #resetting data
         tasks = []
         save_tasks(tasks)
         return tasks

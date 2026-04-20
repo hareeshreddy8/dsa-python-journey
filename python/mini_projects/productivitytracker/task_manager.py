@@ -6,38 +6,65 @@ def create_task(task_name,priority,due_date):
 #Mark task as done using its index
 def mark_task_done(tasks,index):
     if not tasks:
-        raise ValueError("No tasks available")
-    if index >= len(tasks) or index < 0:
-        raise IndexError(f"Invalid index.Please enter between {0} and {len(tasks)-1}")
+        return {"status" : "error","message":"No task available. ","data" : None}
+    if not isinstance(index,int):
+        return {"status" : "error","message":"Index must be an integer. ","data" : None}
+    if not 0 <= index < len(tasks):
+        return {"status" : "error","message":"Index out of range. ","data" :  None}
     #update task with that index  
-    tasks[index]["status"] = True
-
-
-#Delete tasks using its index
-def delete_task(tasks,index):
-    if not tasks :
-        raise ValueError("No tasks available. ")
-    if index >= len(tasks) or index < 0 :
-        raise IndexError(f"Invalid index.Please enter between {0} and {len(tasks)-1}")
+    if tasks[index]["status"]:
+        return {"status" : "error","message":"Task already completed. ","data" : tasks[index]}
     
+    tasks[index]["status"] = True
+    return {"status" : "success",
+            "message":"Task updated successfully",
+            "data" : tasks[index]}
+
+
+#Delete task using its index
+def delete_task(tasks,index):
+    #validating tasks
+    if not tasks :
+        return {"status" : "error","message":"No task available. ","data" : None}
+    #validating index type
+    if not isinstance(index,int):
+        return {"status" : "error","message":"Index must be in numbers ","data" : None}
+    #validating index range
+    if not 0 <= index < len(tasks) :
+        return {"status" : "error","message":"Index out of range.  ","data" : None}
     #update tasks by deleting using its index 
-    tasks.pop(index)
+    deleted_task= tasks.pop(index)
+
+    return {"status": "success","message": "Task deleted successfully.","data": deleted_task}
 
 #Edit name of existing task using index
 def edit_task(tasks,index : int,new_name:str):
     if not tasks:
-        raise ValueError("No tasks available.")
+        return {"status" : "error","message":"No tasks available.","data": None}
     if not 0 <= index < len(tasks) :
-        raise IndexError(f"Invalid index.Please enter between {0} and {len(tasks) - 1}")
+        return {"status" : "error","message":"Index out of range.","data": None}
+    if not new_name or not new_name.strip():
+        return {"status" : "error","message":"Invalid name.","data": None}
+    new_name = new_name.strip()
+    if tasks[index]["name"] == new_name:
+        return {"status" : "error","message":"Name must be new. ","data": None}
     tasks[index]["name"] = new_name
+    return {"status" : "success","message":"Task name updated successfully.","data": tasks[index]}
+
+
 
 #Search tasks with task name 
 def search_task(tasks,name):
     tasks_found = []
+    if not tasks:
+        return {"status": "success","message": "No matching tasks found","data": []}
+    if not name or not name.strip():
+        return {"status": "error","message": "Invalid name.","data": None}
+    name = name.strip().lower()
     for task in tasks:
-        if name.lower() in task["name"].lower():
+        if name in task["name"].lower():
             tasks_found.append(task)
-    return tasks_found
+    return {"status": "success","message": "Tasks found successfully","data": tasks_found}
 
 
 #filter task with priority 
@@ -76,4 +103,40 @@ def get_task_stats(tasks):
         stats[priority] = stats.get(priority,0) + 1
 
     return stats
+
+#implementing function without input() and print() only structured response
+def add_task(tasks,name,priority,due_date):
+    #validating name 
+    if not name or not name.stip():
+        return {"status": "error","message":"Invalid name.","data":None}
+    priority = priority.lower()
+    if priority not in {"high","medium","low"}:
+        return {"status": "error","message":"Invalid priority.","data":None}
+    parts = due_date.split("-") 
+    if len(parts) != 3:
+        return {"status": "error","message":"Invalid duedate. must be in the format YYYY-MM-DD. ","data":None}
+    year,month,day = parts
+    
+    if not(year.isdigit() and month.isdigit() and day.isdigit()):
+        return {"status": "error","message":"Date must contain only numbers. ","data":None}
+    
+    if not(len(year) == 4 and len(month) == 2 and len(day) == 2) :
+        return {"status": "error","message":"Invalid date format. ","data":None}
+    
+    month = int(month)
+    day = int(day)
+    
+    if not (0 < month <= 12 and 0 < day <= 31):
+        return {"status": "error","message":"Invalid month or day ","data":None}
+    
+    task = create_task(name,priority,due_date)
+    tasks.append(task)
+
+    return {"status": "success","message":"Task created successfully. ","data":tasks}
+        
+            
+        
+        
+        
+
 
