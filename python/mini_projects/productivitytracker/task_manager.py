@@ -107,7 +107,7 @@ def get_task_stats(tasks):
 #implementing function without input() and print() only structured response
 def add_task(tasks,name,priority,due_date):
     #validating name 
-    if not name or not name.stip():
+    if not name or not name.strip():
         return {"status": "error","message":"Invalid name.","data":None}
     priority = priority.lower()
     if priority not in {"high","medium","low"}:
